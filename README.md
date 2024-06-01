@@ -14,6 +14,7 @@ To run the project:
 
 Else
   pip install Flask qrcode[pil] requests
+  myenv\Scripts\activate
   python app.py
 
 
