@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator and URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(300deg, #00bfff, #ff4c68, #ef8172);
+            background-size: 600% 600%;
+            animation: gradient-animation 18s ease infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 1;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 1.2em;
+        }
+
+        input[type="url"] {
+            padding: 10px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result img {
+            max-width: 200px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator and URL Shortener</h1>
+        <form method="post">
+            <label for="url">Enter URL:</label>
+            <input type="url" id="url" name="url" value="{{ short_url }}" required>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="short_url" value="short_url"> Shorten URL
+                </label>
+                <label>
+                    <input type="checkbox" name="qr_code" value="qr_code"> Generate QR Code
+                </label>
+            </div>
+            <button type="submit">Generate</button>
+        </form>
+        {% if short_url %}
+            <div class="result">
+                <h2>Shortened URL:</h2>
+                <input type="text" id="shortUrl" value="{{ short_url }}" readonly>
+                <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+            </div>
+        {% endif %}
+        {% if qr_img %}
+            <div class="result">
+                <h2>QR Code:</h2>
+                <img src="{{ qr_img }}" alt="QR Code">
+                <a href="{{ url_for('download_file', filename=qr_img.split('/')[-1]) }}" class="download-link" download>Download QR Code</a>
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="result" style="color: red;">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        function copyToClipboard() {
+            var copyText = document.getElementById("shortUrl");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            document.execCommand("copy");
+            alert("Copied the URL: " + copyText.value);
+        }
+    </script>
+</body>
+</html>
