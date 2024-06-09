@@ -7,7 +7,7 @@ import re
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/qr_codes/'
 
-BITLY_ACCESS_TOKEN = '909e1f1f819438f23afeb8870620d09ec944db5b'
+BITLY_ACCESS_TOKEN = 'enter your token key (API Key)'
 
 def shorten_url(long_url):
     headers = {'Authorization': f'Bearer {BITLY_ACCESS_TOKEN}', 'Content-Type': 'application/json'}
